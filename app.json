@@ -1,5 +1,6 @@
 {
   "expo": {
+    "newArchEnabled": true,
     "name": "GuessGame",
     "slug": "GuessGame",
     "version": "1.0.0",
