@@ -1,35 +1,77 @@
 import { useState } from 'react';
-import { StyleSheet, View, ImageBackground } from 'react-native';
+import { StyleSheet, View, ImageBackground, SafeAreaView, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameSCreen';
+import GameOverScreen from './screens/GameOverScreen';
+import Colors from './constants/colors';
+
 
 
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
+  const [gameIsOver, setGameIsOver]= useState(true);
+  const [guessRounds, setGuessRounds]= useState(0);
 
+  const [fontsLoaded]=useFonts({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  });
+
+  if (!fontsLoaded){
+    return <AppLoading/>
+  }
 
 function pickedeNumberHandler(pickedNumber){
   setUserNumber(pickedNumber);
+  setGameIsOver(false);
 }
 
-  let screen = <StartGameScreen onPickNumber={pickedeNumberHandler}/>
+function gameOverHandler(numberOfRounds){
+  setGameIsOver(true);
+  setGuessRounds(numberOfRounds);
+}
+
+function startNewGameHandler(){
+setUserNumber(null);
+setGuessRounds(0);
+
+}
+
+
+  let screen = <StartGameScreen onPickNumber={pickedeNumberHandler} onGameOver={gameOverHandler}/>
 
   if (userNumber){
-    screen = <GameScreen/>
+    screen = <GameScreen userNumber={userNumber}  onGameOver={gameOverHandler}/>
   }
 
+  if (gameIsOver && userNumber){
+    screen = <GameOverScreen userNumber={userNumber} roundsNumber={guessRounds} onStartNewGame={startNewGameHandler}/>  
+  }
+
+
   return (
+    
     <ImageBackground 
     source={require('./assets/images/background.jpg')}
     resizeMode='cover'
-    style={styles.rootScreen}
+    style={[styles.rootScreen, styles.ImageBackground]}
     
     >
-     {screen}
+      <SafeAreaView  style={styles.rootScreen}>
+        <StatusBar
+        barStyle="light-content" 
+        />
+        
+      {screen}
+     
+      </SafeAreaView>
+     
      </ImageBackground>
- 
+  
   
   );
 }
@@ -37,5 +79,14 @@ function pickedeNumberHandler(pickedNumber){
 const styles = StyleSheet.create({
   rootScreen:{
     flex: 1,
-  }
+    opacity: 1,
+    
+  },
+  ImageBackground:{
+    opacity:0.9
+  },
+
 });
+
+
+
