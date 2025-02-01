@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { StyleSheet, View, ImageBackground, SafeAreaView, StatusBar } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { StyleSheet, View, ImageBackground, SafeAreaView} from 'react-native';
+
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameSCreen';
 import GameOverScreen from './screens/GameOverScreen';
-import Colors from './constants/colors';
+import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -54,7 +54,8 @@ setGuessRounds(0);
 
 
   return (
-    
+    <>
+    <StatusBar style='light'/>
     <ImageBackground 
     source={require('./assets/images/background.jpg')}
     resizeMode='cover'
@@ -72,6 +73,7 @@ setGuessRounds(0);
      
      </ImageBackground>
   
+  </>
   
   );
 }
